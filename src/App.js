@@ -4,6 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import FriendsList from './components/FriendsList'
 import NavBar from './components/NavBar'
 import BillForm from './components/BillForm'
+import BillFeed from './components/BillFeed'
 import CustomList from './components/mini/CustomList'
 // import logo from './logo.svg';
 // import './App.css';
@@ -23,8 +24,8 @@ class App extends Component {
             <Col md={5}>
               <BillForm/>
             </Col>
-            <Col md={7}>
-              
+            <Col md={5}>
+              <BillFeed/>
             </Col>
           </Row>
         </Grid>

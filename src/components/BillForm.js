@@ -19,18 +19,24 @@ const styles = {
 class BillForm extends Component {
     state = {
         description:'',
-        bill:null,
+        bill:'',
         value: 1,
         people:[],
         details:[],
-        split:1,
+        splitMethod:1,
         showPeopleBills:false,
         paidByUserOnly:true,
-        userAmount:''
+        userAmount:'',
+        userPercent:''
       };
     changeCurrentUserAmount(amount){
         this.setState({
             userAmount:amount
+        })
+    }
+    changeCurrentUserPercent(percent){
+        this.setState({
+            userPercent:percent
         })
     }
     changePersonPaidAmount(index,amount){
@@ -40,31 +46,29 @@ class BillForm extends Component {
         newDetails[index].paid = amount;
         this.setState({details:newDetails});
     }
+    changePersonPercent(index,percent){
+        let newDetails = [...this.state.details];
+        newDetails[index].percent = percent;
+        this.setState({details:newDetails});
+    }
     AddPerson(e){
         if(e.keyCode == 13){
             let newState = {...this.state}
             newState.people.push(e.target.value);
             newState.details.push({
                 email:e.target.value,
-                paid:null
+                paid:'',
+                percent:''
             })
             e.target.value = '',
             this.setState(newState)
         }
     }
-    // updatePeopleData(people,index){
-    //     let newState = {...this.state}
-    //     newState.people = people;
-    //     newState.details.splice(index,1);
-    //     this.setState(newState);
-    //     console.log('newdetails',newState.details)
-    // }
     updatePeopleData(indexToDelete){
         let newState = {...this.state};
         newState.people.splice(indexToDelete,1);
         newState.details.splice(indexToDelete,1);
         this.setState(newState);
-        console.log('newdetails',newState.details)
     }
     togglePeopleBills(){
         this.setState({
@@ -92,13 +96,16 @@ class BillForm extends Component {
             })
          }
     }
-      handleChange = (event, index, split) => this.setState({split});
+      changeSplitMethod = (event, index, splitMethod) => this.setState({splitMethod});
       submitForm(){
+        let numOfPeoplePaid = 0
         let billData = {
             by:"srksumanth@gmail.com",
+            description:this.state.description,
             people:["srksumanth@gmail.com"].concat(this.state.people),
             bill:this.state.bill,
-            details:[]
+            details:[],
+            splitMethod:this.state.splitMethod
         };
           let calculatedbill = 0;
           calculatedbill += Number(this.state.userAmount);
@@ -113,27 +120,43 @@ class BillForm extends Component {
               else{//
                 alert('ready to send data!!');
                 
-                billData.details.push({person:billData.by,paid:Number(this.state.userAmount)})
-                this.state.details.forEach((personDetails)=>{
+                billData.details.push({email:billData.by,paid:Number(this.state.userAmount)})
+                this.state.details.forEach((detail)=>{
                     billData.details.push({
-                        person:personDetails.email,
-                        paid:Number(personDetails.paid)
+                        email:detail.email,
+                        paid:Number(detail.paid)
                     });
+                    if(Number(detail.paid) > 0) //excludes user
+                    numOfPeoplePaid++;
                 })
+                if(Number(this.state.userAmount) > 0) numOfPeoplePaid++ //includes user
+                billData.numOfPeoplePaid = numOfPeoplePaid
+                if(this.state.splitMethod === 1){
+                    alert('wow')
+                billData.settlements = this.getSettlementsForEqualSplit(billData.bill,billData.details)
+                }
+                if(this.state.splitMethod === 2)
+                billData.settlements = this.getSettlementsForEqualSplit(billData.bill,this.state.details)
 
               }
           }
           
           else{//paid by user only
               alert('ready to send data!!');
-              
+              numOfPeoplePaid = 1;
                   billData.details.push({person:billData.by,paid:billData.bill})
-                  this.state.people.forEach((person)=>{
+                  this.state.details.forEach((detail)=>{
                       billData.details.push({
-                          person:person,
+                          email:detail.email,
                           paid:0
                       })
                   })
+                  billData.numOfPeoplePaid = numOfPeoplePaid
+                  if(this.state.splitMethod === 1)
+                  billData.settlements = this.settleEqualUserOnly(billData.bill,this.state.details)
+                  if(this.state.splitMethod === 2)
+                  billData.settlements = this.settleUnEqualUserOnly(billData.bill,this.state.details)
+            
           }
           console.log('billdata',billData)
         //   make a post request
@@ -146,6 +169,95 @@ class BillForm extends Component {
           })
 
       }
+      splitBillAlgo(details){
+        let settlements = [];
+        let sortByAscending = (details)=>{
+            details.sort((a,b)=>{
+                return a.diff-b.diff
+              });
+        }
+        sortByAscending(details);
+        while(details.length > 1){
+            if((details[0].diff + details[details.length-1].diff) < 0){
+              let amount = Math.min(Math.abs(details[0].diff),Math.abs(details[details.length-1].diff));
+              settlements.push({
+                receiver:details[details.length-1].email,
+                giver:details[0].email,
+                amount
+              })
+              details[0].diff += amount;
+              details.pop();
+              sortByAscending(details);
+            }
+            else if((details[0].diff + details[details.length-1].diff) > 0){
+              let amount = Math.min(Math.abs(details[0].diff),Math.abs(details[details.length-1].diff));
+              settlements.push({
+                receiver:details[details.length-1].email,
+                giver:details[0].email,
+                amount
+              })
+                details[details.length-1].diff -= amount;
+                details.shift();
+                sortByAscending(details);
+            }
+            else{
+                settlements.push({
+                receiver:details[details.length-1].email,
+                giver:details[0].email,
+                amount:Math.abs(details[0].diff)
+              })
+              details.pop();
+              details.shift();
+            //   sortByAscending(details);
+            }
+          }
+          return settlements;
+      }
+
+      getSettlementsForUnequalSplit(totalBill,details){
+        let diffDetails = [];
+        details.forEach((detail)=>{
+            let diff = detail.paid - (totalBill/100 * detail.percent);
+            diffDetails.push({
+                email:detail.email,
+                diff
+            })
+        });
+        return this.splitBillAlgo(diffDetails);
+      }
+      getSettlementsForEqualSplit(totalBill,details){
+          let diffDetails = [];
+          details.forEach((detail)=>{
+            let diff = detail.paid - (totalBill/details.length);
+            diffDetails.push({
+                email:detail.email,
+                diff
+            })
+        });
+        return this.splitBillAlgo(diffDetails);
+      }
+      settleEqualUserOnly(totalBill,details){
+          let settlements = [];
+          details.forEach((detail)=>{
+              settlements.push({
+                  receiver:'srksumanth@gmail.com',
+                  giver:detail.email,
+                  amount:totalBill/(details.length+1)
+              })
+          })
+          return settlements;
+      }
+      settleUnEqualUserOnly(totalBill,details){
+        let settlements = [];
+        details.forEach((detail)=>{
+            settlements.push({
+                receiver:detail.email,
+                giver:'srksumanth@gmail.com',
+                amount:totalBill/100 * detail.percent
+            })
+        })
+        return settlements;
+    }
     render () {
         return (
             <div>
@@ -155,7 +267,10 @@ class BillForm extends Component {
 
                 <TextField type="number" floatingLabelText="bill amount" value={this.state.bill}
                 onChange={this.onBillChange.bind(this)}/> 
-
+                {/* <SelectField floatingLabelText="split" value={this.state.splitMethod} onChange={this.changeSplitMethod}>
+                    <MenuItem value={1} primaryText="Split Equally" />
+                    <MenuItem value={2} primaryText="Split By Percentage" />
+                </SelectField>   */}
                 <TextField onKeyDown={this.AddPerson.bind(this)} floatingLabelText="type to add people"/>
 
                 <PeopleChips updatePeopleData={this.updatePeopleData.bind(this)} people={this.state.people}/>
@@ -164,15 +279,17 @@ class BillForm extends Component {
                 <Chip onClick={this.togglePeopleBills.bind(this)} style={styles.chip}> {this.paidByTag.call(this)} </Chip>
 
                 <ToggleDisplay show={this.state.showPeopleBills}>
+
                 <CustomList changeCurrentUserAmount={this.changeCurrentUserAmount.bind(this)}
                 changePersonPaidAmount={this.changePersonPaidAmount.bind(this)}
-                 people={this.state.people}/>
-                </ToggleDisplay>
+                changeCurrentUserPercent={this.changeCurrentUserPercent.bind(this)}
+                changePersonPercent={this.changePersonPercent.bind(this)}
+                 people={this.state.people}
+                 splitMethod = {this.state.splitMethod}
+                 details = {this.state.details}
+                 />
 
-                <SelectField floatingLabelText="split" value={this.state.split}onChange={this.handleChange}>
-                    <MenuItem value={1} primaryText="Equally" />
-                    <MenuItem value={2} primaryText="Unequally" />
-                </SelectField>       
+                </ToggleDisplay>     
                 <br></br>
                 <DateField/>
                 <br></br>
