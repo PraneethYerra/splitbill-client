@@ -13,34 +13,82 @@ class CustomList extends Component {
         super(props);
     }
     render () {
-        return (
-            <Paper zDepth={1}>
-            <List >
-            <Row>
-            <Col md={5}>
-            <ListItem primaryText={'you'} leftIcon={<AccountCircle />}/>
-            </Col>
-            <Col md={2}>
-            <TextField type="number" hintText={'amount paid'}
-             onChange={(e)=>{this.props.changeCurrentUserAmount(e.target.value)}}/>
-            </Col>
-            </Row>
-                {this.props.people.map((person,index)=>{
-                    return (
-                        <Row key={index}>
-                        <Col md={5}>
-                        <ListItem key={index} primaryText={person} leftIcon={<AccountCircle />}/>
-                        </Col>
-                        <Col md={2}>
-                        <TextField type="number" key={index} hintText={'amount paid'}
-                         onChange={(e)=>{this.props.changePersonPaidAmount(index,e.target.value)}}/>
-                        </Col>
-                        </Row>
-                    )
-                })}
-            </List>
-            </Paper>
-        )
+        if(this.props.splitMethod === 1){
+            return (
+                <Paper zDepth={1}>
+                <List >
+                <Row>
+                <Col md={5}>
+                <ListItem primaryText={'you'} leftIcon={<AccountCircle />}/>
+                </Col>
+                <Col md={3}>
+                <TextField fullWidth={true} type="number" hintText={'amount paid'}
+                 onChange={(e)=>{this.props.changeCurrentUserAmount(e.target.value)}}/>
+                </Col>
+                </Row>
+                    {this.props.people.map((person,index)=>{
+                        return (
+                            <Row key={index}>
+                            <Col md={5}>
+                            <ListItem key={index} primaryText={person} leftIcon={<AccountCircle />}/>
+                            </Col>
+                            <Col md={3}>
+                            <TextField fullWidth={true} type="number" key={index} hintText={'amount paid'}
+                             onChange={(e)=>{this.props.changePersonPaidAmount(index,e.target.value)}}
+                             value = {this.props.details[index].paid}
+                             />
+    
+                            </Col>
+                            </Row>
+                        )
+                    })}
+                </List>
+                </Paper>
+            )
+        }
+        else if(this.props.splitMethod === 2){
+            return (
+                <Paper zDepth={1}>
+                <List >
+                <Row>
+                <Col md={5}>
+                <ListItem primaryText={'you'} leftIcon={<AccountCircle />}/>
+                </Col>
+                <Col md={4}>
+                <TextField fullWidth={true} type="number" hintText={'amount paid'}
+                 onChange={(e)=>{this.props.changeCurrentUserAmount(e.target.value)}}/>
+                </Col>
+                <Col md={2}>
+                <TextField fullWidth={true} type="number" hintText={'%'}
+                onChange={(e)=>{this.props.changeCurrentUserPercent(e.target.value)}}/>
+                </Col>
+                
+                </Row>
+                    {this.props.people.map((person,index)=>{
+                        return (
+                            <Row key={index}>
+                            <Col md={5}>
+                            <ListItem key={index} primaryText={person} leftIcon={<AccountCircle />}/>
+                            </Col>
+                            <Col md={4}>
+                            <TextField fullWidth={true} type="number" key={index} hintText={'amount paid'}
+                             onChange={(e)=>{this.props.changePersonPaidAmount(index,e.target.value)}}
+                             value = {this.props.details[index].paid}
+                             />
+                            </Col>
+                            <Col md={2}>
+                            <TextField  fullWidth={true} type="number" key={index} hintText={'%'}
+                             onChange={(e)=>{this.props.changePersonPercent(index,e.target.value)}}
+                             value = {this.props.details[index].percent}
+                             />
+                            </Col>
+                            </Row>
+                        )
+                    })}
+                </List>
+                </Paper>
+            )
+        }
     }
 }
 
