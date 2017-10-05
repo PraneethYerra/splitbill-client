@@ -26,13 +26,14 @@ class FriendsList extends Component {
     
     render () {
         return (
-            <List>
+            <div>
                 {this.state.friends.map(friend=>{
                     return (
-                        <ListItem primaryText={friend} leftIcon={<AccountCircle />}/>
+                        <ListItem onClick={()=>{this.props.updateDashHeading(friend)}} 
+                        primaryText={friend} leftIcon={<AccountCircle />}/>
                     )
                 })}
-            </List>
+            </div>
         )
     }
 }

@@ -3,11 +3,16 @@ import {List, ListItem} from 'material-ui/List';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import axios from 'axios'
 import Paper from 'material-ui/Paper'
+import BillList from './mini/BillList'
+// import ToggleDisplay from 'react-toggle-display'
+
 class BillFeed extends Component {
     constructor(props){
         super(props)
         this.state = {
-            bills:[]
+            bills:[],
+            show: false,
+            style: {heightToggle:{height:'80px',overflow:'hidden'}}
         }
     }
     componentDidMount () {
@@ -16,7 +21,7 @@ class BillFeed extends Component {
                 this.setState({
                     bills:res.data
                 })
-                alert('status 200')
+                // alert('status 200')
             }
             else{
                 alert('something went wrong')
@@ -27,10 +32,22 @@ class BillFeed extends Component {
     }
     displayPeoplePaid(numOfPeoplePaid,bill){
         if(numOfPeoplePaid === 1){
-            return `you paid ${bill}`
+            // return `you paid ${bill}`
+            return(
+                <div>
+                    <p style={{margin:'0px'}}>you paid</p>
+                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
+                </div>
+            )
         }
         else{
-            return `${numOfPeoplePaid} people paid ${bill}`
+            // return `${numOfPeoplePaid} people paid ${bill}`
+            return(
+                <div>
+                    <p style={{margin:'0px'}}>{numOfPeoplePaid} people paid</p>
+                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
+                </div>
+            )
         }
     }
     displaySettlement(settlements){
@@ -38,12 +55,31 @@ class BillFeed extends Component {
             if((settlement.giver === 'srksumanth@gmail.com' && settlement.receiver === 'cool') || (settlement.receiver === 'srksumanth@gmail.com' && settlement.giver === 'cool'))
             return true;
         });
+        if(settlementArr.length === 0)
+            return(
+                <div>
+                    <p style={{margin:'0px'}}>you borrowed </p>
+                    <p style={{margin:'0px'}}>nothing</p>
+                </div>
+            )
         let settlement = settlementArr[0];
         if(settlement.receiver === 'srksumanth@gmail.com'){
-            return `you lent ${settlement.giver} Rs.${settlement.amount}`
+            // return `you lent ${settlement.giver} Rs.${settlement.amount}`
+            return(
+                <div>
+                    <p style={{margin:'0px'}}>you lent {settlement.giver}</p>
+                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
+                </div>
+            )
         }
         if(settlement.giver === 'srksumanth@gmail.com'){
-            return `${settlement.receiver} lent you Rs.${settlement.amount}`
+            // return `${settlement.receiver} lent you Rs.${settlement.amount}`
+            return(
+                <div>
+                    <p style={{margin:'0px'}}>{settlement.receiver} lent you</p>
+                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
+                </div>
+            )
         }
     }
     displayAllUserBillDetails(billDetails){
@@ -55,21 +91,14 @@ class BillFeed extends Component {
             })
         )
     }
+    
     render () {
         return (
             <div>
                 {
                     this.state.bills.map((billData,index)=>{
                         return (
-                            <Paper>
-                                <div style={{padding:"10px"}}>
-                                <p>{billData.description}</p>
-                                <p>{this.displayPeoplePaid(billData.numOfPeoplePaid,billData.bill)}</p>
-                                <p>{this.displaySettlement(billData.settlements)}</p>
-                                </div>
-                                {this.displayAllUserBillDetails(billData.details)}
-                            </Paper>
-        
+                            <BillList billData={billData} key={index}/>
                         )
                     })
                 }

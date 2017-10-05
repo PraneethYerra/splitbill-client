@@ -17,9 +17,10 @@ class NavBar extends Component {
     render () {
         return (
             <AppBar
-    title={<span style={styles.title}>Title</span>}
+    title={<span style={styles.title}>SPLIT BILL</span>}
     onTitleTouchTap={handleTouchTap}
-    iconElementRight={<FlatButton label="Add Bill" />}
+    iconElementRight={<FlatButton label="User" />}
+    iconClassNameLeft={<span></span>}
   />
         )
     }

@@ -144,7 +144,7 @@ class BillForm extends Component {
           else{//paid by user only
               alert('ready to send data!!');
               numOfPeoplePaid = 1;
-                  billData.details.push({person:billData.by,paid:billData.bill})
+                  billData.details.push({email:billData.by,paid:billData.bill})
                   this.state.details.forEach((detail)=>{
                       billData.details.push({
                           email:detail.email,
