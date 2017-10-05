@@ -7,21 +7,26 @@ import BillForm from './components/BillForm'
 import CustomList from './components/mini/CustomList'
 // import logo from './logo.svg';
 // import './App.css';
+import Dashboard from './components/dashboard'
 
 class App extends Component {
   render() {
     return (
+    
       <MuiThemeProvider>
-        <Grid>
-          {/* <NavBar/>
-          <Row>
+      <NavBar/>
+          {/* <Row>
             <Col md={3}>
             <FriendsList/>
             </Col>
           </Row> */}
+        
+        <Grid>
+          <br />
+          <Dashboard></Dashboard>
           <Row>
             <Col md={5}>
-              <BillForm/>
+              {/* <BillForm/> */}
             </Col>
             <Col md={7}>
               
