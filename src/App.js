@@ -33,6 +33,8 @@ class App extends Component {
       this.setState({
         dashHeading : user.displayName
       })
+      window.localStorage.setItem('email',user.email)
+      window.localStorage.setItem('displayName',user.displayName)
     })
   }
   
