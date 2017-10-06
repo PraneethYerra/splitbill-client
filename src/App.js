@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import {List, ListItem} from 'material-ui/List';
+import axios from 'axios'
 import FriendsList from './components/FriendsList'
 import NavBar from './components/NavBar'
 import BillForm from './components/BillForm'
@@ -22,10 +23,19 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      dashHeading : 'Poorn Chandu' ,
+      dashHeading : '' ,
       
     }            
   }
+  componentDidMount () {
+    axios.get('/user').then(res=>{
+      let user = res.data
+      this.setState({
+        dashHeading : user.displayName
+      })
+    })
+  }
+  
   updateDashHeading(dashHeading){
     this.setState({dashHeading});
   }
