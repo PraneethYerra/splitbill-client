@@ -7,12 +7,14 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
+import axios from 'axios'
 
 class AddFriendDialog extends Component {
     constructor(props){
         super(props);
         this.state={
-            friendDialogOpen: false
+            friendDialogOpen: false,
+            friendEmail:''
         }
         
     }
@@ -23,6 +25,17 @@ class AddFriendDialog extends Component {
       handleClose = () => {
         this.setState({friendDialogOpen: false});
       };
+      submitForm(){
+          
+        axios.post(`/add-friend`,{friendEmail:this.state.friendEmail}).then(res=>{
+            if(res.status === 200){
+                alert('posted successfully')
+            }
+          }).catch(err=>{
+            console.log(err);
+          })
+        
+      }
     render () {
         const actions = [
             <FlatButton
@@ -34,7 +47,7 @@ class AddFriendDialog extends Component {
               label="Submit"
               primary={true}
               /* keyboardFocused={true} */
-              onClick={()=>{this.handleClose();}}
+              onClick={this.submitForm.bind(this)}
             />,
           ];
         return (
@@ -52,6 +65,8 @@ class AddFriendDialog extends Component {
                 <TextField
                 floatingLabelText="Friend Email"
                 fullWidth={true}
+                value={this.state.friendEmail}
+                onChange={(e)=>{this.setState({friendEmail:e.target.value})}}
                 />                                               
             </Dialog>
             </div>

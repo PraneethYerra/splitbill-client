@@ -5,14 +5,14 @@ class Settlements extends Component {
     constructor(props){
         super(props);
         this.state={
-            settlements:{}
+            settlements:[]
         }
     }
     componentDidMount () {
         axios.get('/smart-settle/cool').then(res=>{
             if(res.status === 200){
                 this.setState({
-                    settlements:res.data
+                    settlements:[res.data]
                 })
                 // alert('status 200')
             }
@@ -53,7 +53,11 @@ class Settlements extends Component {
     render () {
         return (
             <div>
-                {this.displaySimplifiedAmount(this.state.settlements)}
+                {
+                    this.state.settlements.map((settlement)=>{
+                       return this.displaySimplifiedAmount(this.state.settlements)
+                    })
+                }
             </div>
         )
     }
