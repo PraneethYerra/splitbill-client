@@ -264,7 +264,7 @@ class BillForm extends Component {
                 <form>
                 <TextField floatingLabelText="description" value={this.state.description}
                 onChange={(e)=>{this.setState({description:e.target.value})}}/> 
-
+                
                 <TextField type="number" floatingLabelText="bill amount" value={this.state.bill}
                 onChange={this.onBillChange.bind(this)}/> 
                 {/* <SelectField floatingLabelText="split" value={this.state.splitMethod} onChange={this.changeSplitMethod}>
