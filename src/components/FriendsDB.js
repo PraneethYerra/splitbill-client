@@ -19,8 +19,7 @@ class FriendsDB extends Component {
         return (
             <div>
                 <br/>
-                    <BillFeed />
-                
+                <BillFeed />
             </div>
         )
     }
