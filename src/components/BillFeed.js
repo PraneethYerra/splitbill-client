@@ -5,7 +5,10 @@ import axios from 'axios'
 import Paper from 'material-ui/Paper'
 import BillList from './mini/BillList'
 // import ToggleDisplay from 'react-toggle-display'
-
+const userDetails = {
+    email:window.localStorage.getItem('email'),
+    displayName: window.localStorage.getItem('displayName')
+}
 class BillFeed extends Component {
     constructor(props){
         super(props)
@@ -51,7 +54,7 @@ class BillFeed extends Component {
     }
     displaySettlement(settlements){
         let settlementArr =  settlements.filter((settlement)=>{
-            if((settlement.giver === 'srksumanth@gmail.com' && settlement.receiver === 'cool') || (settlement.receiver === 'srksumanth@gmail.com' && settlement.giver === 'cool'))
+            if((settlement.giver === userDetails.email && settlement.receiver === this.props.friendEmail) || (settlement.receiver === userDetails.email && settlement.giver === this.props.friendEmail))
             return true;
         });
         if(settlementArr.length === 0)
@@ -62,7 +65,7 @@ class BillFeed extends Component {
                 </div>
             )
         let settlement = settlementArr[0];
-        if(settlement.receiver === 'srksumanth@gmail.com'){
+        if(settlement.receiver === userDetails.email){
             // return `you lent ${settlement.giver} Rs.${settlement.amount}`
             return(
                 <div>
@@ -71,7 +74,7 @@ class BillFeed extends Component {
                 </div>
             )
         }
-        if(settlement.giver === 'srksumanth@gmail.com'){
+        if(settlement.giver === userDetails.email){
             // return `${settlement.receiver} lent you Rs.${settlement.amount}`
             return(
                 <div>
@@ -98,7 +101,7 @@ class BillFeed extends Component {
                 {
                     this.props.bills.map((billData,index)=>{
                         return (
-                            <BillList billData={billData} key={index}/>
+                            <BillList friendEmail={this.props.friendEmail} billData={billData} key={index}/>
                         )
                     })
                 }

@@ -18,7 +18,7 @@ class BillList extends Component {
     }
     heightChange(){
         if(this.state.style.heightToggle.height==='80px')
-        this.setState({style: {heightToggle:{height:'200px',overflow:'hidden'}}})
+        this.setState({style: {heightToggle:{minHeight:'200px',overflow:'hidden'}}})
         else
         this.setState({style: {heightToggle:{height:'80px',overflow:'hidden'}}})
     }
@@ -44,7 +44,7 @@ class BillList extends Component {
     }
     displaySettlement(settlements){
         let settlementArr =  settlements.filter((settlement)=>{
-            if((settlement.giver === userDetails.email && settlement.receiver === 'cool') || (settlement.receiver === userDetails.email && settlement.giver === 'cool'))
+            if((settlement.giver === userDetails.email && settlement.receiver === this.props.friendEmail) || (settlement.receiver === userDetails.email && settlement.giver === this.props.friendEmail))
             return true;
         });
         if(settlementArr.length === 0)
