@@ -24,6 +24,7 @@ class App extends Component {
     super(props);
     this.state = {
       dashHeading : '' ,
+      bills:[]
       
     }            
   }
@@ -41,6 +42,20 @@ class App extends Component {
   updateDashHeading(dashHeading){
     this.setState({dashHeading});
   }
+  updateBillFeed(email,displayName){
+    alert(email)
+    axios.get(`bills/${email}`).then(res=>{
+      let bills  = res.data;
+      alert('waiting to update bill')
+      this.setState({
+        dashHeading :displayName,
+        bills
+      })
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
   
   render() {
     return (
@@ -56,12 +71,13 @@ class App extends Component {
                 <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Friends</Subheader>
                   
                 <AddFriendDialog />
-                <FriendsList updateDashHeading ={this.updateDashHeading.bind(this)}/>
+                <FriendsList updateBillFeed={this.updateBillFeed.bind(this)} 
+                updateDashHeading ={this.updateDashHeading.bind(this)}/>
                 </List>  
             </Col> 
             <Col md={6}>
               <Dashboard dashHeading={this.state.dashHeading}/>
-              <FriendsDB />
+              <BillFeed bills={this.state.bills}/>
               <Row>
                 <Col md={12}>
                   {/* <BillFeed /> */}

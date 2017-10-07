@@ -10,6 +10,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CustomList from './mini/CustomList'
 import ToggleDisplay from 'react-toggle-display'
 import Paper from 'material-ui/Paper';
+const userDetails = {
+    email:window.localStorage.getItem('email'),
+    displayName: window.localStorage.getItem('displayName')
+}
 const styles = {
     chip:{
         margin:4
@@ -100,9 +104,9 @@ class BillForm extends Component {
       submitForm(){
         let numOfPeoplePaid = 0
         let billData = {
-            by:"srksumanth@gmail.com",
+            by:userDetails.email,
             description:this.state.description,
-            people:["srksumanth@gmail.com"].concat(this.state.people),
+            people:[userDetails.email].concat(this.state.people),
             bill:this.state.bill,
             details:[],
             splitMethod:this.state.splitMethod
@@ -240,7 +244,7 @@ class BillForm extends Component {
           let settlements = [];
           details.forEach((detail)=>{
               settlements.push({
-                  receiver:'srksumanth@gmail.com',
+                  receiver:userDetails.email,
                   giver:detail.email,
                   amount:totalBill/(details.length+1)
               })
@@ -252,7 +256,7 @@ class BillForm extends Component {
         details.forEach((detail)=>{
             settlements.push({
                 receiver:detail.email,
-                giver:'srksumanth@gmail.com',
+                giver:userDetails.email,
                 amount:totalBill/100 * detail.percent
             })
         })
@@ -272,9 +276,8 @@ class BillForm extends Component {
                     <MenuItem value={2} primaryText="Split By Percentage" />
                 </SelectField>   */}
                 <TextField onKeyDown={this.AddPerson.bind(this)} floatingLabelText="type to add people"/>
-
+    
                 <PeopleChips updatePeopleData={this.updatePeopleData.bind(this)} people={this.state.people}/>
-                <br></br>
                 <span>Paid By</span><br></br>
                 <Chip onClick={this.togglePeopleBills.bind(this)} style={styles.chip}> {this.paidByTag.call(this)} </Chip>
 

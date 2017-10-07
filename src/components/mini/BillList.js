@@ -3,7 +3,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import BillFeed from '../BillFeed'
 import Paper from 'material-ui/Paper'
-
+const userDetails = {
+    email:window.localStorage.getItem('email'),
+    displayName: window.localStorage.getItem('displayName')
+}
 class BillList extends Component {
     constructor(props){
         super(props);
@@ -41,7 +44,7 @@ class BillList extends Component {
     }
     displaySettlement(settlements){
         let settlementArr =  settlements.filter((settlement)=>{
-            if((settlement.giver === 'srksumanth@gmail.com' && settlement.receiver === 'cool') || (settlement.receiver === 'srksumanth@gmail.com' && settlement.giver === 'cool'))
+            if((settlement.giver === userDetails.email && settlement.receiver === 'cool') || (settlement.receiver === userDetails.email && settlement.giver === 'cool'))
             return true;
         });
         if(settlementArr.length === 0)
@@ -52,7 +55,7 @@ class BillList extends Component {
                 </div>
             )
         let settlement = settlementArr[0];
-        if(settlement.receiver === 'srksumanth@gmail.com'){
+        if(settlement.receiver === userDetails.email){
             // return `you lent ${settlement.giver} Rs.${settlement.amount}`
             return(
                 <div>
@@ -61,7 +64,7 @@ class BillList extends Component {
                 </div>
             )
         }
-        if(settlement.giver === 'srksumanth@gmail.com'){
+        if(settlement.giver === userDetails.email){
             // return `${settlement.receiver} lent you Rs.${settlement.amount}`
             return(
                 <div>

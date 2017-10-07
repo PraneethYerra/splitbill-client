@@ -10,26 +10,25 @@ class BillFeed extends Component {
     constructor(props){
         super(props)
         this.state = {
-            bills:[],
             show: false,
             style: {heightToggle:{height:'80px',overflow:'hidden'}}
         }
     }
-    componentDidMount () {
-        axios.get('/bills/cool').then(res=>{
-            if(res.status === 200){
-                this.setState({
-                    bills:res.data
-                })
-                // alert('status 200')
-            }
-            else{
-                alert('something went wrong')
-            }
-        }).catch(err=>{
-            console.log(err);
-        })
-    }
+    // componentDidMount () {
+    //     axios.get('/bills/cool').then(res=>{
+    //         if(res.status === 200){
+    //             this.setState({
+    //                 bills:res.data
+    //             })
+    //             // alert('status 200')
+    //         }
+    //         else{
+    //             alert('something went wrong')
+    //         }
+    //     }).catch(err=>{
+    //         console.log(err);
+    //     })
+    // }
     displayPeoplePaid(numOfPeoplePaid,bill){
         if(numOfPeoplePaid === 1){
             // return `you paid ${bill}`
@@ -95,8 +94,9 @@ class BillFeed extends Component {
     render () {
         return (
             <div>
+                <br/>
                 {
-                    this.state.bills.map((billData,index)=>{
+                    this.props.bills.map((billData,index)=>{
                         return (
                             <BillList billData={billData} key={index}/>
                         )
