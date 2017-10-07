@@ -39,7 +39,7 @@ class AddSettle extends Component {
 
         return (
                     <Row>
-                        <Col md={7}><b style={{fontSize:"30px"}}>Hey {this.props.dashHeading} !</b></Col> 
+                        <Col md={7}><b style={{fontSize:"30px"}}>{this.props.dashHeading}</b></Col> 
                         <Col md={3}>
                                 <RaisedButton label="Add Bill" secondary={true} onClick={this.handleOpen}/>
                                 <Dialog

@@ -31,7 +31,7 @@ class GroupsList extends Component {
             {this.state.groups.map(groupName=>{
                     return (
                         <ListItem 
-                        primaryText={friend} leftIcon={<AccountCircle />}/>
+                        primaryText={groupName} leftIcon={<AccountCircle />}/>
                     )
                 })}               
             </div>

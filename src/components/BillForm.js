@@ -64,7 +64,7 @@ class BillForm extends Component {
                 paid:'',
                 percent:''
             })
-            e.target.value = '',
+            e.target.value = ''
             this.setState(newState)
         }
     }

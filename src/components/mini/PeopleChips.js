@@ -52,7 +52,7 @@ class PeopleChips extends React.Component {
       render() {
         return (
           <div style={this.styles.wrapper}>
-            <Chip onClick={()=>alert('cool')} style={this.styles.chip}>you</Chip> 
+            <Chip style={this.styles.chip}>you</Chip> 
             {this.props.people.map(this.renderChip, this)}
           </div>
         );
