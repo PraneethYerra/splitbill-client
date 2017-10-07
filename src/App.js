@@ -15,6 +15,8 @@ import FriendsDB from './components/FriendsDB'
 import Settlements from './components/Settlements'
 import Subheader from 'material-ui/Subheader';
 import AddFriendDialog from './components/mini/AddFriendDialog'
+import GroupList from './components/GroupList'
+import CreateGroup from './components/mini/CreateGroup'
 // import logo from './logo.svg';
 // import './App.css';
 import Dashboard from './components/dashboard'
@@ -43,10 +45,10 @@ class App extends Component {
     this.setState({dashHeading});
   }
   updateBillFeed(email,displayName){
-    alert(email)
+    // alert(email)
     axios.get(`bills/${email}`).then(res=>{
       let bills  = res.data;
-      alert('waiting to update bill')
+      // alert('waiting to update bill')
       this.setState({
         dashHeading :displayName,
         bills
@@ -68,11 +70,13 @@ class App extends Component {
             <Col md ={3}>  
                 <List>
                 <ListItem primaryText="Dashboard" leftIcon={<FileFolder />}/>
-                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Friends</Subheader>
-                  
+                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Friends</Subheader>  
                 <AddFriendDialog />
                 <FriendsList updateBillFeed={this.updateBillFeed.bind(this)} 
                 updateDashHeading ={this.updateDashHeading.bind(this)}/>
+                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Groups</Subheader>
+                <CreateGroup />
+                <GroupList />
                 </List>  
             </Col> 
             <Col md={6}>
