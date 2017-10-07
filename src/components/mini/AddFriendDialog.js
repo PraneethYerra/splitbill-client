@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 import axios from 'axios'
 
 class AddFriendDialog extends Component {
@@ -14,7 +15,8 @@ class AddFriendDialog extends Component {
         super(props);
         this.state={
             friendDialogOpen: false,
-            friendEmail:''
+            friendEmail:'',
+            snackOpen:false
         }
         
     }
@@ -25,14 +27,28 @@ class AddFriendDialog extends Component {
       handleClose = () => {
         this.setState({friendDialogOpen: false});
       };
+
+      handleTouchTap = () => {
+        this.setState({
+          snackOpen: true,
+        });
+      };
+    
+      handleRequestClose = () => {
+        this.setState({
+          snackOpen: false,
+        });
+      };
       submitForm(){
           
         axios.post(`/add-friend`,{friendEmail:this.state.friendEmail}).then(res=>{
             if(res.status === 200){
-                alert('posted successfully')
+                // alert('posted successfully')
+                this.handleClose();
+                this.handleTouchTap();
             }
           }).catch(err=>{
-            console.log(err);
+            console.log(err);            
           })
         
       }
@@ -69,6 +85,12 @@ class AddFriendDialog extends Component {
                 onChange={(e)=>{this.setState({friendEmail:e.target.value})}}
                 />                                               
             </Dialog>
+            <Snackbar
+            open={this.state.snackOpen}
+            message="Friend Added Successfully !"
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+            />
             </div>
         )
     }
