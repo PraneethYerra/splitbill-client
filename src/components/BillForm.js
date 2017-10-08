@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CustomList from './mini/CustomList'
 import ToggleDisplay from 'react-toggle-display'
 import Paper from 'material-ui/Paper';
+import AutoComplete from 'material-ui/AutoComplete';
 const userDetails = {
     email:window.localStorage.getItem('email'),
     displayName: window.localStorage.getItem('displayName')
@@ -19,7 +20,6 @@ const styles = {
         margin:4
     }
 }
-
 class BillForm extends Component {
     state = {
         description:'',
@@ -32,6 +32,8 @@ class BillForm extends Component {
         paidByUserOnly:true,
         userAmount:'',
         userPercent:''
+        ,friends:[],
+        focus:true
       };
     changeCurrentUserAmount(amount){
         this.setState({
@@ -58,6 +60,7 @@ class BillForm extends Component {
     AddPerson(e){
         if(e.keyCode == 13){
             let newState = {...this.state}
+            console.log(e.target.value);
             newState.people.push(e.target.value);
             newState.details.push({
                 email:e.target.value,
@@ -262,20 +265,46 @@ class BillForm extends Component {
         })
         return settlements;
     }
+    getFriends=()=>{
+        this.setState({
+            focus:false
+        })
+        axios.get('/friends').then(res=>{
+            this.setState({
+                friends : res.data,
+            })
+        })
+    }
     render () {
+        const dataSourceConfig = {
+            text: 'displayName',
+            value: 'email',
+          };
         return (
             <div>
                 <form>
                 <TextField floatingLabelText="description" value={this.state.description}
                 onChange={(e)=>{this.setState({description:e.target.value})}}/> 
-                
+                <span> &nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <TextField type="number" floatingLabelText="bill amount" value={this.state.bill}
                 onChange={this.onBillChange.bind(this)}/> 
                 {/* <SelectField floatingLabelText="split" value={this.state.splitMethod} onChange={this.changeSplitMethod}>
                     <MenuItem value={1} primaryText="Split Equally" />
                     <MenuItem value={2} primaryText="Split By Percentage" />
                 </SelectField>   */}
-                <TextField onKeyDown={this.AddPerson.bind(this)} floatingLabelText="type to add people"/>
+                <TextField onKeyDown={this.AddPerson.bind(this)} 
+                           floatingLabelText="type to add people"
+                           onFocus={this.state.focus?this.getFriends:null}
+                           />
+                           {/* <AutoComplete 
+                           floatingLabelText="type to add people"
+                           onKeyDown={this.AddPerson.bind(this)} 
+                           onFocus={this.state.focus?this.getFriends:null}
+                            filter={AutoComplete.noFilter}
+                            openOnFocus={true}
+                            dataSource={this.state.friends}
+                            dataSourceConfig={dataSourceConfig}
+                            /> */}
     
                 <PeopleChips updatePeopleData={this.updatePeopleData.bind(this)} people={this.state.people}/>
                 <span>Paid By</span><br></br>
