@@ -9,7 +9,7 @@ import BillForm from './components/BillForm'
 import BillFeed from './components/BillFeed'
 import CustomList from './components/mini/CustomList'
 import AccountCircle from 'material-ui/svg-icons/action/account-circle'
-import FileFolder from 'material-ui/svg-icons/file/folder';
+import ViewAgenda from 'material-ui/svg-icons/action/view-agenda';
 import {blue500, yellow600} from 'material-ui/styles/colors';
 import FriendsDB from './components/FriendsDB'
 import Settlements from './components/Settlements'
@@ -17,6 +17,7 @@ import Subheader from 'material-ui/Subheader';
 import AddFriendDialog from './components/mini/AddFriendDialog'
 import GroupList from './components/GroupList'
 import CreateGroup from './components/mini/CreateGroup'
+import ToggleDisplay from 'react-toggle-display';
 // import logo from './logo.svg';
 // import './App.css';
 import Dashboard from './components/dashboard'
@@ -27,7 +28,10 @@ class App extends Component {
     this.state = {
       dashHeading : '' ,
       bills:[],
-      friendEmail:''
+      friendEmail:'',
+      dashFeed:true,
+      friendsFeed:false,
+      groupsFeed:false
       
     }            
   }
@@ -59,8 +63,20 @@ class App extends Component {
       console.log(err);
     })
   }
-
-  
+  dashFeedShow() {
+    this.setState({
+      dashFeed:true,
+      friendsFeed:false,
+      groupsFeed:false
+    });
+  }
+  friendsFeedShow(){
+    this.setState({
+      dashFeed:false,
+      friendsFeed:true,
+      groupsFeed:false
+    })
+  }
   render() {
     return (
     
@@ -71,19 +87,26 @@ class App extends Component {
           <Row>
             <Col md ={3}>  
                 <List>
-                <ListItem primaryText="Dashboard" leftIcon={<FileFolder />}/>
-                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Friends</Subheader>  
+                <ListItem primaryText="Dashboard" leftIcon={<ViewAgenda />} 
+                          onClick={()=>{this.updateDashHeading(window.localStorage.getItem("displayName"));
+                                        this.dashFeedShow()}}
+                          />
+                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'80%'}}>Friends</Subheader>  
                 <AddFriendDialog />
                 <FriendsList updateBillFeed={this.updateBillFeed.bind(this)} 
-                updateDashHeading ={this.updateDashHeading.bind(this)}/>
-                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'60%'}}>Groups</Subheader>
+                             updateDashHeading ={this.updateDashHeading.bind(this)}
+                             friendsFeedShow={this.friendsFeedShow.bind(this)}
+                             />
+                <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'80%'}}>Groups</Subheader>
                 <CreateGroup />
                 <GroupList />
                 </List>  
             </Col> 
             <Col md={6}>
               <Dashboard dashHeading={this.state.dashHeading}/>
-              <BillFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
+              <ToggleDisplay show={this.state.friendsFeed}>
+                <BillFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
+              </ToggleDisplay>
               <Row>
                 <Col md={12}>
                   {/* <BillFeed /> */}
