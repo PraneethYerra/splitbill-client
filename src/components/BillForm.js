@@ -33,8 +33,14 @@ class BillForm extends Component {
         userAmount:'',
         userPercent:''
         ,friends:[],
-        focus:true
+        focus:true,
+        date:Date.now()
       };
+      updateDate =(date)=>{
+        this.setState({
+            date
+        })
+      }
     changeCurrentUserAmount(amount){
         this.setState({
             userAmount:amount
@@ -112,7 +118,8 @@ class BillForm extends Component {
             people:[userDetails.email].concat(this.state.people),
             bill:this.state.bill,
             details:[],
-            splitMethod:this.state.splitMethod
+            splitMethod:this.state.splitMethod,
+            date:this.state.date
         };
           let calculatedbill = 0;
           calculatedbill += Number(this.state.userAmount);
@@ -323,7 +330,7 @@ class BillForm extends Component {
 
                 </ToggleDisplay>     
                 <br></br>
-                <DateField/>
+                <DateField updateDate={this.updateDate}/>
                 <br></br>
                 <RaisedButton onClick={this.submitForm.bind(this)} label="Add Bill" primary={true} />              
                 </form>

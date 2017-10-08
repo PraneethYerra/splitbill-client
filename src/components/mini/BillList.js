@@ -3,6 +3,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import BillFeed from '../BillFeed'
 import Paper from 'material-ui/Paper'
+import moment from 'moment'
+
 const userDetails = {
     email:window.localStorage.getItem('email'),
     displayName: window.localStorage.getItem('displayName')
@@ -83,6 +85,17 @@ class BillList extends Component {
             })
         )
     }
+    date(billDate){
+        let date = moment(billDate)
+        let month = date.format("MMM");
+        let monthday = date.format("D"); 
+        return (
+            <div className="date">
+            <p style={{margin:'1px 0px'}}>{month}</p>
+            <p style={{fontSize:'24px',margin:'5px 0px'}}>{monthday}</p>
+        </div>
+        )
+    }
     
     render () {
         return (
@@ -91,10 +104,7 @@ class BillList extends Component {
                                 
                                     <Row>
                                         <Col md={1}>
-                                            <div className="date">
-                                                <p style={{margin:'1px 0px'}}>SEP</p>
-                                                <p style={{fontSize:'24px',margin:'5px 0px'}}>19</p>
-                                            </div>
+                                            {this.date(this.props.billData.date)}
                                         </Col>
                                         <Col md={5}>
                                             <div className="description" style={{display:'inline-block'}}>
