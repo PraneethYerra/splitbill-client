@@ -26,10 +26,11 @@ class FriendsList extends Component {
     render () {
         return (
             <div>
-                {this.state.friends.map(friend=>{
+                {this.state.friends.map((friend,index)=>{
                     return (
                         <ListItem onClick={()=>{this.props.updateBillFeed(friend.email,friend.displayName);                                                }} 
-                        primaryText={friend.displayName} leftIcon={<AccountCircle />}/>
+                        primaryText={friend.displayName} leftIcon={<AccountCircle />}
+                        key={index}/>
                     )
                     })}
             </div>
