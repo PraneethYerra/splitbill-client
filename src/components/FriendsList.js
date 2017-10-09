@@ -30,7 +30,7 @@ class FriendsList extends Component {
                 {this.state.friends.map(friend=>{
                     return (
                         <ListItem onClick={()=>{this.props.updateBillFeed(friend.email,friend.displayName);
-                                                this.props.friendsFeedShow()}} 
+                                                this.props.friendsFeedShow();}} 
                         primaryText={friend.displayName} leftIcon={<AccountCircle />}/>
                     )
                 })}

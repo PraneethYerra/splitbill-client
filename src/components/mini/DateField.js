@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import DatePicker from 'material-ui/DatePicker';
-import moment from 'moment'
 const defaultDate = new Date();
 class DateField extends Component {
     constructor(props){

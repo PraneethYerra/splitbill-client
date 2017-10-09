@@ -4,31 +4,14 @@ import axios from 'axios'
 class Settlements extends Component {
     constructor(props){
         super(props);
-        this.state={
-            settlements:[]
-        }
     }
-    componentDidMount () {
-        axios.get('/smart-settle/cool').then(res=>{
-            if(res.status === 200){
-                this.setState({
-                    settlements:[res.data]
-                })
-                // alert('status 200')
-            }
-            else{
-                alert('something went wrong')
-            }
-        }).catch(err=>{
-            console.log(err);
-        })
-    }
+    
     displaySimplifiedAmount(settlements){
         if(settlements.totalDues < 0){
             return(
                 <div>
                 <p>you owe {settlements.email}</p>
-                <p>&#8377;{Math.abs(settlements.totalDues)}</p>
+                <b>&#8377;{Math.abs(settlements.totalDues)}</b>
                 </div>
             )
         }
@@ -36,7 +19,7 @@ class Settlements extends Component {
             return(
                 <div>
                 <p>{settlements.email} owes you</p>
-                <p>&#8377;{Math.abs(settlements.totalDues)}</p>
+                <b>&#8377;{Math.abs(settlements.totalDues)}</b>
                 </div>
             )
         }
@@ -51,11 +34,12 @@ class Settlements extends Component {
         
     }
     render () {
+        console.log(this.props.settlements)
         return (
             <div>
                 {
-                    this.state.settlements.map((settlement)=>{
-                       return this.displaySimplifiedAmount(this.state.settlements)
+                    this.props.settlements.map((settlement)=>{
+                       return this.displaySimplifiedAmount(settlement)
                     })
                 }
             </div>
