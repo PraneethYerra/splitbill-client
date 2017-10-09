@@ -100,12 +100,13 @@ class BillForm extends Component {
         if(this.state.paidByUserOnly){
             this.setState({
                 bill:val,
-                userAmount:val
+                // userAmount:val
             })
         }
         else{
             this.setState({
-                bill:val
+                bill:val,
+               
             })
          }
     }
@@ -116,11 +117,12 @@ class BillForm extends Component {
             by:userDetails.email,
             description:this.state.description,
             people:[userDetails.email].concat(this.state.people),
-            bill:this.state.bill,
+            bill:Number(this.state.bill),
             details:[],
             splitMethod:this.state.splitMethod,
             date:this.state.date
         };
+
           let calculatedbill = 0;
           calculatedbill += Number(this.state.userAmount);
           if(!this.state.paidByUserOnly){//if paid by multiple people
@@ -326,6 +328,7 @@ class BillForm extends Component {
                  people={this.state.people}
                  splitMethod = {this.state.splitMethod}
                  details = {this.state.details}
+                 userAmount={this.state.userAmount}
                  />
 
                 </ToggleDisplay>     

@@ -15,7 +15,6 @@ class FriendsList extends Component {
     }
     componentDidMount () {
         axios.get('/friends').then(res=>{
-            console.log(res.data)
             this.setState({
                 friends:res.data
             })
@@ -23,17 +22,16 @@ class FriendsList extends Component {
             console.warn(err)
         })
     }
-    
+
     render () {
         return (
             <div>
                 {this.state.friends.map(friend=>{
                     return (
-                        <ListItem onClick={()=>{this.props.updateBillFeed(friend.email,friend.displayName);
-                                                this.props.friendsFeedShow();}} 
+                        <ListItem onClick={()=>{this.props.updateBillFeed(friend.email,friend.displayName);                                                }} 
                         primaryText={friend.displayName} leftIcon={<AccountCircle />}/>
                     )
-                })}
+                    })}
             </div>
         )
     }

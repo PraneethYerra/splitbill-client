@@ -34,7 +34,6 @@ class Settlements extends Component {
         
     }
     render () {
-        console.log(this.props.settlements)
         return (
             <div>
                 {

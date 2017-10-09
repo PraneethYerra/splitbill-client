@@ -34,8 +34,7 @@ class App extends Component {
       dashFeed:true,
       friendsFeed:false,
       groupsFeed:false,
-      settlements:[]
-      
+      settlements:[]      
     }            
   }
   componentDidMount () {
@@ -61,7 +60,10 @@ class App extends Component {
       this.setState({
         dashHeading :displayName,
         bills,
-        friendEmail:email
+        friendEmail:email,
+        dashFeed:false,
+        friendsFeed:true,
+        groupsFeed:false
       })
     }).catch(err=>{
       console.log(err);
@@ -90,6 +92,7 @@ class App extends Component {
           console.log(err);
       })
   }
+
   dashFeedShow() {
     this.setState({
       dashFeed:true,
@@ -97,13 +100,13 @@ class App extends Component {
       groupsFeed:false
     });
   }
-  friendsFeedShow(){
-    this.setState({
-      dashFeed:false,
-      friendsFeed:true,
-      groupsFeed:false
-    })
-  }
+  // friendsFeedShow(){
+  //   this.setState({
+  //     dashFeed:false,
+  //     friendsFeed:true,
+  //     groupsFeed:false
+  //   })
+  // }
   groupFeedShow(){
     this.setState({
       dashFeed:false,
@@ -129,7 +132,6 @@ class App extends Component {
                 <AddFriendDialog />
                 <FriendsList updateBillFeed={this.updateBillFeed.bind(this)} 
                              updateDashHeading ={this.updateDashHeading.bind(this)}
-                             friendsFeedShow={this.friendsFeedShow.bind(this)}
                              />
                 <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'80%'}}>Groups</Subheader>
                 <CreateGroup />
@@ -148,7 +150,9 @@ class App extends Component {
               </ToggleDisplay>
             </Col>
             <Col md={3}>
-              <Settlements settlements={this.state.settlements}/>
+              <ToggleDisplay show={this.state.friendsFeed}>
+                <Settlements settlements={this.state.settlements}/>
+              </ToggleDisplay>
             </Col>
           </Row>
         </Grid>

@@ -23,7 +23,9 @@ class CustomList extends Component {
                 </Col>
                 <Col md={3}>
                 <TextField fullWidth={true} type="number" hintText={'amount paid'}
-                 onChange={(e)=>{this.props.changeCurrentUserAmount(e.target.value)}}/>
+                 onChange={(e)=>{this.props.changeCurrentUserAmount(e.target.value)}}
+                 value={this.props.userAmount}
+                 />
                 </Col>
                 </Row>
                     {this.props.people.map((person,index)=>{

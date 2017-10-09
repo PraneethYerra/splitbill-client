@@ -15,7 +15,6 @@ class GroupList extends Component {
     }
     componentDidMount () {
         axios.get('/groups').then(res=>{
-            console.log('res',res.data)
             this.setState({
                 groups:res.data
             })
