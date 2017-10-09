@@ -68,7 +68,7 @@ class App extends Component {
     })
   }
   updateGroupBillFeed(groupId,groupName){
-    axios.get(`groupBills/${groupId}`).then(res=>{
+    axios.get(`/groupBills/${groupId}`).then(res=>{
       let groupBills = res.data;
       this.setState({
         groupBills
