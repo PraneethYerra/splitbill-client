@@ -44,8 +44,18 @@ class CreateGroup extends Component {
       submitForm(){
         let groupData = {
           name : this.state.groupName,
-          people : [window.localStorage.getItem('email')].concat(this.state.groupPeople)
+          people : [window.localStorage.getItem('email')].concat(this.state.groupPeople),
+          settlements:[]
         }
+        groupData.people.forEach(function(person) {
+          groupData.settlements.push({
+            _id:person,
+            email:person,
+            dues:[],
+            totalDues:0
+          })
+        });
+
         console.log('group data',groupData)
         axios.post(`/create-group`,groupData).then(res=>{
             if(res.status === 200){
