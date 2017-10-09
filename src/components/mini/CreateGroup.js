@@ -47,13 +47,14 @@ class CreateGroup extends Component {
           people : [window.localStorage.getItem('email')].concat(this.state.groupPeople),
           settlements:[]
         }
-        groupData.people.forEach((person)=>{
+        groupData.people.forEach(function(person) {
           groupData.settlements.push({
+            _id:person,
             email:person,
             dues:[],
-            totalDues:0,
+            totalDues:0
           })
-        })
+        });
         console.log('group data',groupData)
         axios.post(`/create-group`,groupData).then(res=>{
             if(res.status === 200){

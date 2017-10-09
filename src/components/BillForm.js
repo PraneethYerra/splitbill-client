@@ -11,6 +11,7 @@ import CustomList from './mini/CustomList'
 import ToggleDisplay from 'react-toggle-display'
 import Paper from 'material-ui/Paper';
 import AutoComplete from 'material-ui/AutoComplete';
+import SelectGroup from './mini/SelectGroup'
 const userDetails = {
     email:window.localStorage.getItem('email'),
     displayName: window.localStorage.getItem('displayName')
@@ -34,7 +35,8 @@ class BillForm extends Component {
         userPercent:''
         ,friends:[],
         focus:true,
-        date:Date.now()
+        date:Date.now(),
+        group:"0"
       };
       updateDate =(date)=>{
         this.setState({
@@ -120,7 +122,8 @@ class BillForm extends Component {
             bill:Number(this.state.bill),
             details:[],
             splitMethod:this.state.splitMethod,
-            date:this.state.date
+            date:this.state.date,
+            group:this.state.group
         };
 
           let calculatedbill = 0;
@@ -284,6 +287,11 @@ class BillForm extends Component {
             })
         })
     }
+    changeGroup = (event,index,group)=>{
+        this.setState({
+            group
+        })
+    }
     render () {
         const dataSourceConfig = {
             text: 'displayName',
@@ -297,6 +305,11 @@ class BillForm extends Component {
                 <span> &nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <TextField type="number" floatingLabelText="bill amount" value={this.state.bill}
                 onChange={this.onBillChange.bind(this)}/> 
+
+                 <SelectGroup group={this.state.group} changeGroup={this.changeGroup}/> 
+                <br/>
+
+                
                 {/* <SelectField floatingLabelText="split" value={this.state.splitMethod} onChange={this.changeSplitMethod}>
                     <MenuItem value={1} primaryText="Split Equally" />
                     <MenuItem value={2} primaryText="Split By Percentage" />
