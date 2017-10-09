@@ -15,7 +15,6 @@ class GroupList extends Component {
     }
     componentDidMount () {
         axios.get('/groups').then(res=>{
-            console.log('res',res.data)
             this.setState({
                 groups:res.data
             })
@@ -29,7 +28,12 @@ class GroupList extends Component {
             {this.state.groups.map(group=>{
                     return (
                         <ListItem 
-                        primaryText={group.name} leftIcon={<GroupIcon />}/>
+                        primaryText={group.name} 
+                        leftIcon={<GroupIcon />}
+                        onClick={()=>{this.props.updateGroupBillFeed(group._id,group.name)
+                                      this.props.updateDashHeading(group.name);
+                                      this.props.groupFeedShow()}}
+                        />
                     )
                 })}
             </div>

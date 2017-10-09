@@ -55,7 +55,6 @@ class CreateGroup extends Component {
             totalDues:0
           })
         });
-
         console.log('group data',groupData)
         axios.post(`/create-group`,groupData).then(res=>{
             if(res.status === 200){

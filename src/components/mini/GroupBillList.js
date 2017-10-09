@@ -9,7 +9,7 @@ const userDetails = {
     email:window.localStorage.getItem('email'),
     displayName: window.localStorage.getItem('displayName')
 }
-class BillList extends Component {
+class GroupBillList extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -133,4 +133,4 @@ class BillList extends Component {
     }
 }
 
-export default BillList
+export default GroupBillList
