@@ -25,14 +25,16 @@ class GroupList extends Component {
     render () {
         return (
             <div>
-            {this.state.groups.map(group=>{
+            {this.state.groups.map((group,index)=>{
                     return (
-                        <ListItem 
+                        <ListItem key={index}
                         primaryText={group.name} 
                         leftIcon={<GroupIcon />}
+                       
                         onClick={()=>{this.props.updateGroupBillFeed(group._id,group.name)
                                       this.props.updateDashHeading(group.name);
-                                      this.props.groupFeedShow()}}
+                                      this.props.groupFeedShow()
+                                      this.props.updateGroupSettlements(group._id)}}
                         />
                     )
                 })}

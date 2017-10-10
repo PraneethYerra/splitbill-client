@@ -14,7 +14,7 @@ class BillFeed extends Component {
         super(props)
         this.state = {
             show: false,
-            style: {heightToggle:{height:'80px',overflow:'hidden'}}
+            // style: {heightToggle:{height:'80px',overflow:'hidden'}}
         }
     }
     // componentDidMount () {
@@ -32,67 +32,67 @@ class BillFeed extends Component {
     //         console.log(err);
     //     })
     // }
-    displayPeoplePaid(numOfPeoplePaid,bill){
-        if(numOfPeoplePaid === 1){
-            // return `you paid ${bill}`
-            return(
-                <div>
-                    <p style={{margin:'0px'}}>you paid</p>
-                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
-                </div>
-            )
-        }
-        else{
-            // return `${numOfPeoplePaid} people paid ${bill}`
-            return(
-                <div>
-                    <p style={{margin:'0px'}}>{numOfPeoplePaid} people paid</p>
-                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
-                </div>
-            )
-        }
-    }
-    displaySettlement(settlements){
-        let settlementArr =  settlements.filter((settlement)=>{
-            if((settlement.giver === userDetails.email && settlement.receiver === this.props.friendEmail) || (settlement.receiver === userDetails.email && settlement.giver === this.props.friendEmail))
-            return true;
-        });
-        if(settlementArr.length === 0)
-            return(
-                <div>
-                    <p style={{margin:'0px'}}>you borrowed </p>
-                    <p style={{margin:'0px'}}>nothing</p>
-                </div>
-            )
-        let settlement = settlementArr[0];
-        if(settlement.receiver === userDetails.email){
-            // return `you lent ${settlement.giver} Rs.${settlement.amount}`
-            return(
-                <div>
-                    <p style={{margin:'0px'}}>you lent {settlement.giver}</p>
-                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
-                </div>
-            )
-        }
-        if(settlement.giver === userDetails.email){
-            // return `${settlement.receiver} lent you Rs.${settlement.amount}`
-            return(
-                <div>
-                    <p style={{margin:'0px'}}>{settlement.receiver} lent you</p>
-                    <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
-                </div>
-            )
-        }
-    }
-    displayAllUserBillDetails(billDetails){
-        return (
-            billDetails.map((billDetail)=>{
-                return (
-                    <p>{billDetail.email} paid {billDetail.paid}</p>
-                )
-            })
-        )
-    }
+    // displayPeoplePaid(numOfPeoplePaid,bill){
+    //     if(numOfPeoplePaid === 1){
+    //         // return `you paid ${bill}`
+    //         return(
+    //             <div>
+    //                 <p style={{margin:'0px'}}>you paid</p>
+    //                 <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
+    //             </div>
+    //         )
+    //     }
+    //     else{
+    //         // return `${numOfPeoplePaid} people paid ${bill}`
+    //         return(
+    //             <div>
+    //                 <p style={{margin:'0px'}}>{numOfPeoplePaid} people paid</p>
+    //                 <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{bill}</p>
+    //             </div>
+    //         )
+    //     }
+    // }
+    // displaySettlement(settlements){
+    //     let settlementArr =  settlements.filter((settlement)=>{
+    //         if((settlement.giver === userDetails.email && settlement.receiver === this.props.friendEmail) || (settlement.receiver === userDetails.email && settlement.giver === this.props.friendEmail))
+    //         return true;
+    //     });
+    //     if(settlementArr.length === 0)
+    //         return(
+    //             <div>
+    //                 <p style={{margin:'0px'}}>you borrowed </p>
+    //                 <p style={{margin:'0px'}}>nothing</p>
+    //             </div>
+    //         )
+    //     let settlement = settlementArr[0];
+    //     if(settlement.receiver === userDetails.email){
+    //         // return `you lent ${settlement.giver} Rs.${settlement.amount}`
+    //         return(
+    //             <div>
+    //                 <p style={{margin:'0px'}}>you lent {settlement.giver}</p>
+    //                 <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
+    //             </div>
+    //         )
+    //     }
+    //     if(settlement.giver === userDetails.email){
+    //         // return `${settlement.receiver} lent you Rs.${settlement.amount}`
+    //         return(
+    //             <div>
+    //                 <p style={{margin:'0px'}}>{settlement.receiver} lent you</p>
+    //                 <p style={{margin:'0px',fontSize:'22px',fontWeight:'600'}}>&#8377;{settlement.amount}</p>
+    //             </div>
+    //         )
+    //     }
+    // }
+    // displayAllUserBillDetails(billDetails){
+    //     return (
+    //         billDetails.map((billDetail)=>{
+    //             return (
+    //                 <p>{billDetail.email} paid {billDetail.paid}</p>
+    //             )
+    //         })
+    //     )
+    // }
     
     render () {
         return (

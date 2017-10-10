@@ -24,7 +24,9 @@ const styles = {
 class BillForm extends Component {
     state = {
         description:'',
+        descriptionError:'',
         bill:'',
+        billError:'',
         value: 1,
         people:[],
         details:[],
@@ -68,10 +70,10 @@ class BillForm extends Component {
     AddPerson(e){
         if(e.keyCode == 13){
             let newState = {...this.state}
-            console.log(e.target.value);
-            newState.people.push(e.target.value);
+            let value = e.target.value.trim();
+            newState.people.push(value);
             newState.details.push({
-                email:e.target.value,
+                email:value,
                 paid:'',
                 percent:''
             })
@@ -117,9 +119,9 @@ class BillForm extends Component {
         let numOfPeoplePaid = 0
         let billData = {
             by:userDetails.email,
-            description:this.state.description,
+            description:this.state.description.trim().charAt(0).toUpperCase() + this.state.description.trim().slice(1),
             people:[userDetails.email].concat(this.state.people),
-            bill:Number(this.state.bill),
+            bill:Number(this.state.bill.trim()),
             details:[],
             splitMethod:this.state.splitMethod,
             date:this.state.date,
@@ -128,6 +130,20 @@ class BillForm extends Component {
 
           let calculatedbill = 0;
           calculatedbill += Number(this.state.userAmount);
+          if(billData.description===''){
+            this.setState({
+                descriptionError:'Enter a valid Description !'
+            })
+            return;
+            }
+          if(billData.bill===0){
+              console.log(billData.bill)
+              this.setState({
+                  billError:'Enter a valid Bill Amount !'
+              })
+              return;
+          }
+
           if(!this.state.paidByUserOnly){//if paid by multiple people
                 this.state.details.forEach(info=>{
                     calculatedbill += Number(info.paid);
@@ -300,11 +316,14 @@ class BillForm extends Component {
         return (
             <div>
                 <form>
-                <TextField floatingLabelText="description" value={this.state.description}
-                onChange={(e)=>{this.setState({description:e.target.value})}}/> 
+                <TextField floatingLabelText="Description" value={this.state.description}
+                onChange={(e)=>{this.setState({description:e.target.value})}}
+                errorText={this.state.descriptionError}
+                /> 
                 <span> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <TextField type="number" floatingLabelText="bill amount" value={this.state.bill}
-                onChange={this.onBillChange.bind(this)}/> 
+                <TextField type="number" floatingLabelText="Bill Amount" value={this.state.bill}
+                onChange={this.onBillChange.bind(this)}
+                errorText={this.state.billError}/> 
 
                  <SelectGroup group={this.state.group} changeGroup={this.changeGroup}/> 
                 <br/>
@@ -315,7 +334,7 @@ class BillForm extends Component {
                     <MenuItem value={2} primaryText="Split By Percentage" />
                 </SelectField>   */}
                 <TextField onKeyDown={this.AddPerson.bind(this)} 
-                           floatingLabelText="type to add people"
+                           floatingLabelText="Type to add Friends"
                            onFocus={this.state.focus?this.getFriends:null}
                            />
                            {/* <AutoComplete 

@@ -86,7 +86,7 @@ class GroupFeed extends Component {
                 {
                     this.props.bills.map((billData,index)=>{
                         return (
-                            <GroupBillList friendEmail={this.props.friendEmail} billData={billData} key={index}/>
+                            <GroupBillList billData={billData} key={index}/>
                         )
                     })
                 }

@@ -19,6 +19,7 @@ import GroupList from './components/GroupList'
 import CreateGroup from './components/mini/CreateGroup'
 import ToggleDisplay from 'react-toggle-display';
 import GroupFeed from './components/GroupFeed'
+import GroupSettlements from './components/GroupSettlements'
 // import logo from './logo.svg';
 // import './App.css';
 import Dashboard from './components/dashboard'
@@ -29,12 +30,13 @@ class App extends Component {
     this.state = {
       dashHeading : '' ,
       bills:[],
-      grouBills:[],
+      groupBills:[],
       friendEmail:'',
       dashFeed:true,
       friendsFeed:false,
       groupsFeed:false,
-      settlements:[]      
+      settlements:[],
+      groupSettlements:[]      
     }            
   }
   componentDidMount () {
@@ -92,7 +94,20 @@ class App extends Component {
           console.log(err);
       })
   }
-
+updateGroupSettlements=(groupId)=>{
+  axios.get(`/group/${groupId}`).then(res=>{
+    if(res.status===200){
+      this.setState({
+        groupSettlements:res.data.settlements
+      })
+    }
+    else{
+      alert('something went wrong')
+    }
+  }).catch(err=>{
+    console.log(err)
+  })
+}
   dashFeedShow() {
     this.setState({
       dashFeed:true,
@@ -137,7 +152,8 @@ class App extends Component {
                 <CreateGroup />
                 <GroupList updateGroupBillFeed={this.updateGroupBillFeed.bind(this)}
                             updateDashHeading={this.updateDashHeading.bind(this)}
-                            groupFeedShow={this.groupFeedShow.bind(this)}/>
+                            groupFeedShow={this.groupFeedShow.bind(this)}
+                            updateGroupSettlements={this.updateGroupSettlements.bind(this)}/>
                 </List>  
             </Col> 
             <Col md={6}>
@@ -146,12 +162,15 @@ class App extends Component {
                 <BillFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
               </ToggleDisplay>
               <ToggleDisplay show={this.state.groupsFeed}>
-                <GroupFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
+                <GroupFeed friendEmail={this.state.friendEmail} bills={this.state.groupBills}/>
               </ToggleDisplay>
             </Col>
             <Col md={3}>
               <ToggleDisplay show={this.state.friendsFeed}>
                 <Settlements settlements={this.state.settlements}/>
+              </ToggleDisplay>
+              <ToggleDisplay show={this.state.groupsFeed}>
+                <GroupSettlements groupSettlements={this.state.groupSettlements}/>
               </ToggleDisplay>
             </Col>
           </Row>
