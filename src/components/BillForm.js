@@ -38,7 +38,9 @@ class BillForm extends Component {
         ,friends:[],
         focus:true,
         date:Date.now(),
-        group:"0"
+        group:"0",
+        newPeople:'',
+        searchText:''
       };
       updateDate =(date)=>{
         this.setState({
@@ -67,19 +69,17 @@ class BillForm extends Component {
         newDetails[index].percent = percent;
         this.setState({details:newDetails});
     }
-    AddPerson(e){
-        if(e.keyCode == 13){
+    AddPerson=(value,index)=>{
+            console.log('hello',value)
             let newState = {...this.state}
-            let value = e.target.value.trim();
-            newState.people.push(value);
+            newState.searchText = '';   
+            newState.people.push(value.email);
             newState.details.push({
-                email:value,
+                email:value.email,
                 paid:'',
                 percent:''
             })
-            e.target.value = ''
             this.setState(newState)
-        }
     }
     updatePeopleData(indexToDelete){
         let newState = {...this.state};
@@ -319,7 +319,7 @@ class BillForm extends Component {
                 <TextField floatingLabelText="Description" value={this.state.description}
                 onChange={(e)=>{this.setState({description:e.target.value})}}
                 errorText={this.state.descriptionError}
-                /> 
+                autoFocus={true}/> 
                 <span> &nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <TextField type="number" floatingLabelText="Bill Amount" value={this.state.bill}
                 onChange={this.onBillChange.bind(this)}
@@ -333,19 +333,21 @@ class BillForm extends Component {
                     <MenuItem value={1} primaryText="Split Equally" />
                     <MenuItem value={2} primaryText="Split By Percentage" />
                 </SelectField>   */}
-                <TextField onKeyDown={this.AddPerson.bind(this)} 
+                {/* <TextField onKeyDown={this.AddPerson.bind(this)} 
                            floatingLabelText="Type to add Friends"
                            onFocus={this.state.focus?this.getFriends:null}
-                           />
-                           {/* <AutoComplete 
-                           floatingLabelText="type to add people"
-                           onKeyDown={this.AddPerson.bind(this)} 
+                           /> */}
+                           <AutoComplete 
+                           floatingLabelText="Type to add people"
                            onFocus={this.state.focus?this.getFriends:null}
-                            filter={AutoComplete.noFilter}
+                            filter={AutoComplete.Filter}
                             openOnFocus={true}
                             dataSource={this.state.friends}
                             dataSourceConfig={dataSourceConfig}
-                            /> */}
+                            onNewRequest={(value,index)=>{this.AddPerson(value,index)}}
+                            onUpdateInput={(searchText)=>{this.setState({searchText})}}
+                            searchText={this.state.searchText}
+                            />
     
                 <PeopleChips updatePeopleData={this.updatePeopleData.bind(this)} people={this.state.people}/>
                 <span>Paid By</span><br></br>
