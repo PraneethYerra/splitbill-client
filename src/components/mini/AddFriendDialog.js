@@ -16,7 +16,8 @@ class AddFriendDialog extends Component {
         this.state={
             friendDialogOpen: false,
             friendEmail:'',
-            snackOpen:false
+            snackOpen:false,
+            message:'',
         }
         
     }
@@ -25,12 +26,16 @@ class AddFriendDialog extends Component {
       };
     
       handleClose = () => {
-        this.setState({friendDialogOpen: false});
+        this.setState({
+          friendDialogOpen: false,
+          friendEmail:''
+        });
       };
 
-      handleTouchTap = () => {
+      handleTouchTap = (message) => {
         this.setState({
           snackOpen: true,
+          message
         });
       };
     
@@ -42,10 +47,14 @@ class AddFriendDialog extends Component {
       submitForm(){
           
         axios.post(`/add-friend`,{friendEmail:this.state.friendEmail}).then(res=>{
-            if(res.status === 200){
-                // alert('posted successfully')
+            if(res.data.success){
                 this.handleClose();
-                this.handleTouchTap();
+                this.handleTouchTap(res.data.message);
+            }
+            if(!res.data.success){
+            
+              // this.handleClose();
+              this.handleTouchTap(res.data.message);
             }
           }).catch(err=>{
             console.log(err);            
@@ -79,6 +88,7 @@ class AddFriendDialog extends Component {
                 onRequestClose={this.handleClose}
                 >
                 <TextField
+                autoFocus
                 floatingLabelText="Friend Email"
                 fullWidth={true}
                 value={this.state.friendEmail}
@@ -87,7 +97,7 @@ class AddFriendDialog extends Component {
             </Dialog>
             <Snackbar
             open={this.state.snackOpen}
-            message="Friend Added Successfully !"
+            message={this.state.message}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
             />

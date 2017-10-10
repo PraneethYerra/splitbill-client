@@ -29,7 +29,7 @@ class App extends Component {
     this.state = {
       dashHeading : '' ,
       bills:[],
-      grouBills:[],
+      groupBills:[],
       friendEmail:'',
       dashFeed:true,
       friendsFeed:false,
@@ -146,7 +146,7 @@ class App extends Component {
                 <BillFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
               </ToggleDisplay>
               <ToggleDisplay show={this.state.groupsFeed}>
-                <GroupFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
+                <GroupFeed friendEmail={this.state.friendEmail} bills={this.state.groupBills}/>
               </ToggleDisplay>
             </Col>
             <Col md={3}>
