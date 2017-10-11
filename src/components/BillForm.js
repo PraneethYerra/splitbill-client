@@ -12,6 +12,7 @@ import ToggleDisplay from 'react-toggle-display'
 import Paper from 'material-ui/Paper';
 import AutoComplete from 'material-ui/AutoComplete';
 import SelectGroup from './mini/SelectGroup'
+import Snackbar from 'material-ui/Snackbar';
 const userDetails = {
     email:window.localStorage.getItem('email'),
     displayName: window.localStorage.getItem('displayName')
@@ -40,7 +41,8 @@ class BillForm extends Component {
         date:Date.now(),
         group:"0",
         newPeople:'',
-        searchText:''
+        searchText:'',
+        snackOpen:false
       };
       updateDate =(date)=>{
         this.setState({
@@ -70,6 +72,12 @@ class BillForm extends Component {
         this.setState({details:newDetails});
     }
     AddPerson=(value,index)=>{
+            if(!value.email){
+                this.setState({
+                    snackOpen:true
+                })
+                return
+            }
             console.log('hello',value)
             let newState = {...this.state}
             newState.searchText = '';   
@@ -297,17 +305,34 @@ class BillForm extends Component {
         this.setState({
             focus:false
         })
+        if(this.state.group==="0"){
         axios.get('/friends').then(res=>{
             this.setState({
                 friends : res.data,
             })
         })
+        }
+        else{
+            axios.get(`/group-people/${this.state.group}`).then(res=>{
+                this.setState({
+                    friends:res.data.people
+                })
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
     }
     changeGroup = (event,index,group)=>{
         this.setState({
-            group
+            group,
+            focus:true
         })
     }
+    handleRequestClose = () => {
+        this.setState({
+          snackOpen: false,
+        });
+      };
     render () {
         const dataSourceConfig = {
             text: 'displayName',
@@ -325,7 +350,7 @@ class BillForm extends Component {
                 onChange={this.onBillChange.bind(this)}
                 errorText={this.state.billError}/> 
 
-                 <SelectGroup group={this.state.group} changeGroup={this.changeGroup}/> 
+                 <SelectGroup group={this.state.group} changeGroup={this.changeGroup} changeGroupId={this.changeGroupId}/> 
                 <br/>
 
                 
@@ -370,6 +395,12 @@ class BillForm extends Component {
                 <DateField updateDate={this.updateDate}/>
                 <br></br>
                 <RaisedButton onClick={this.submitForm.bind(this)} label="Add Bill" primary={true} />              
+                <Snackbar
+                open={this.state.snackOpen}
+                message="Friend Does not Exist!"
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose}
+                />
                 </form>
             </div>
         )

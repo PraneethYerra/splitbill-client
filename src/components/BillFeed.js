@@ -96,7 +96,7 @@ class BillFeed extends Component {
     
     render () {
         return (
-            <div>
+            <div style={{marginBottom:'50px'}}>
                 <br/>
                 {
                     this.props.bills.map((billData,index)=>{

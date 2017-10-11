@@ -38,6 +38,7 @@ class PeopleChips extends React.Component {
               };
     
       renderChip(data,key) {
+        if(data){
         return (
           <Chip
             key={key}
@@ -48,12 +49,15 @@ class PeopleChips extends React.Component {
           </Chip>
         );
       }
+      }
     
       render() {
         return (
           <div style={this.styles.wrapper}>
             <Chip style={this.styles.chip}>you</Chip> 
-            {this.props.people.map(this.renderChip, this)}
+            { 
+              this.props.people.map(this.renderChip, this)
+            }
           </div>
         );
       }
