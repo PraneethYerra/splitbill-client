@@ -34,7 +34,7 @@ class AddSettle extends Component {
       };
     
       settleHandleClose = () => {
-        this.setState({settleOpen: false});
+        this.setState({settleOpen: false,settleAmount:''});
       };
       getFriends=()=>{
         axios.get('/friends').then(res=>{
