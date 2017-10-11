@@ -11,6 +11,11 @@ import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import axios from 'axios'
 import AutoComplete from 'material-ui/AutoComplete';
+const userDetails = {
+  _id:window.localStorage.getItem('email'),
+  email:window.localStorage.getItem('email'),
+  displayName: window.localStorage.getItem('displayName')
+}
 class CreateGroup extends Component {
     constructor(props){
         super(props);
@@ -22,7 +27,8 @@ class CreateGroup extends Component {
             friends:[],
             focus:true,
             searchText:'',
-            groupNameError:''
+            groupNameError:'',
+            groupPeopleDetails:[]
         }
         
     }
@@ -48,7 +54,7 @@ class CreateGroup extends Component {
       submitForm(){
         let groupData = {
           name : this.state.groupName.trim(),
-          people : [window.localStorage.getItem('email')].concat(this.state.groupPeople),
+          people : [userDetails].concat(this.state.groupPeopleDetails),
           settlements:[]
         }
         if(groupData.name===''){
@@ -59,8 +65,8 @@ class CreateGroup extends Component {
         }
         groupData.people.forEach(function(person) {
           groupData.settlements.push({
-            _id:person,
-            email:person,
+            _id:person.email,
+            email:person.email,
             dues:[],
             totalDues:0
           })
@@ -79,9 +85,13 @@ class CreateGroup extends Component {
       }
       AddPerson(value,index){
         // if(e.keyCode == 13){
+            if(!value.email){
+              return
+            }
             let newState = {...this.state}
             newState.searchText = '';
             newState.groupPeople.push(value.email);
+            newState.groupPeopleDetails.push(value)
             this.setState(newState)
         //}
     }

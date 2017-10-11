@@ -7,8 +7,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import AddSettle from './mini/AddSettle'
 function handleTouchTap() {
-    alert('onClick triggered on the title component');
   }
   
   const styles = {
@@ -49,12 +49,13 @@ class NavBar extends Component {
             <AppBar
     title={<span style={styles.title}>SPLIT BILL</span>}
     onTitleTouchTap={handleTouchTap}
-    iconElementRight= {<div>
+    iconElementRight= {<div style={{width:'600px',margin:'inherit'}}>
+      <AddSettle/>
       <RaisedButton
           onClick={this.handleTouchTap}
           label={window.localStorage.getItem("displayName")}
         />
-    <Popover
+        <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
@@ -62,8 +63,14 @@ class NavBar extends Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            <MenuItem primaryText="Settings" />
-            <MenuItem primaryText="Sign out" />
+            <MenuItem primaryText="Invite Friends" onClick={()=>{
+              this.props.handleOpen()
+            }}/>
+            <MenuItem primaryText="Sign out" onClick={()=>{
+              window.localStorage.removeItem('email');
+              window.localStorage.removeItem('displayName');
+              window.location.href = "http://localhost:3000/logout"
+            }}/>
           </Menu>
         </Popover>
         </div>}

@@ -136,10 +136,10 @@ class AddSettle extends Component {
           ];
           
         return (
-                    <Row>
-                        <Col md={7}><b style={{fontSize:"30px",color:'#616161'}}>{this.props.dashHeading}</b></Col> 
-                        <Col md={3}>
-                                <RaisedButton label="Add Bill" secondary={true} onClick={this.handleOpen}/>
+                    <div style={{display:'inline-block'}}>
+                        {/* <Col md={7}><b style={{fontSize:"30px",color:'#616161'}}>{this.props.dashHeading}</b></Col>  */}
+                        {/* <Col md={6}> */}
+                                <RaisedButton label="Add Bill" secondary={true} onClick={this.handleOpen} style={{marginRight:'40px'}}/>
                                 <Dialog
                                 title="Add Your Bill"
                                 /* actions={actions} */
@@ -150,10 +150,11 @@ class AddSettle extends Component {
                                 >
                                 <BillForm />                             
                                 </Dialog>
-                        </Col>
-                        <Col md={2}>
-                            <RaisedButton label="Settle" primary={true} onClick={()=>{this.settleHandleOpen();
-                                                                                        this.getFriends()}}/>
+                        {/* </Col>
+                        <Col md={6}> */}
+                            <RaisedButton label="Settle" secondary={true} onClick={()=>{this.settleHandleOpen();
+                                                                                        this.getFriends()}}
+                                                                                        style={{marginRight:'40px'}}/>
                             <Dialog
                                 title="Settle Up"
                                 actions={actions} 
@@ -178,8 +179,8 @@ class AddSettle extends Component {
                                 autoHideDuration={4000}
                                 onRequestClose={this.handleRequestClose}
                                 />
-                        </Col>
-                    </Row>
+                        {/* </Col> */}
+                    </div>
             
         )
     }

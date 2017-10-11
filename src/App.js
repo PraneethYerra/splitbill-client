@@ -20,6 +20,9 @@ import CreateGroup from './components/mini/CreateGroup'
 import ToggleDisplay from 'react-toggle-display';
 import GroupFeed from './components/GroupFeed'
 import GroupSettlements from './components/GroupSettlements'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField'
 // import logo from './logo.svg';
 // import './App.css';
 import Dashboard from './components/dashboard'
@@ -36,14 +39,18 @@ class App extends Component {
       friendsFeed:false,
       groupsFeed:false,
       settlements:[],
-      groupSettlements:[]      
+      groupSettlements:[],
+      groupId:'',
+      open:false,
+      inviteEmail:''
+      // dashSummary:[]      
     }            
   }
   componentDidMount () {
     axios.get('/user').then(res=>{
       let user = res.data
       this.setState({
-        dashHeading : user.displayName
+        dashHeading : 'Dashboard'
       })
       window.localStorage.setItem('email',user.email)
       window.localStorage.setItem('displayName',user.displayName)
@@ -75,7 +82,8 @@ class App extends Component {
     axios.get(`/groupBills/${groupId}`).then(res=>{
       let groupBills = res.data;
       this.setState({
-        groupBills
+        groupBills,
+        groupId
       })
     })
   }
@@ -107,12 +115,26 @@ updateGroupSettlements=(groupId)=>{
   }).catch(err=>{
     console.log(err)
   })
+
 }
   dashFeedShow() {
+    // axios.get(`/summary`).then(res=>{
+    //   if(res.status===200){
+    //     this.setState({
+    //       dashSummary:res.data
+    //     })
+    //   }
+    //   else{
+    //     alert('something went wrong')
+    //   }
+    // }).catch(err=>{
+    //   console.log(err)
+    // })
     this.setState({
       dashFeed:true,
       friendsFeed:false,
-      groupsFeed:false
+      groupsFeed:false,
+
     });
   }
   // friendsFeedShow(){
@@ -129,18 +151,58 @@ updateGroupSettlements=(groupId)=>{
       groupsFeed:true
     })
   }
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+  inviteFriend=()=>{
+    alert(this.state.inviteEmail)
+    axios.post('/invite',{inviteEmail:this.state.inviteEmail}).then(res=>{
+      if(res.data.success){
+        alert("Friend Invited!")
+      }
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        onClick={this.inviteFriend}
+      />,
+    ];
     return (
     
       <MuiThemeProvider>
-      <NavBar/>
+      <NavBar handleOpen={this.handleOpen}/>
+      <Dialog
+          title="Invite Friend"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+        <TextField floatingLabelText="Enter a Friend Email"
+                    onChange={(e)=>{this.setState({inviteEmail:e.target.value})}}
+                    value={this.state.inviteEmail}/>
+        </Dialog>
           <br />
         <Grid>
           <Row>
             <Col md ={3}>  
                 <List>
                 <ListItem primaryText="Dashboard" leftIcon={<ViewAgenda />} 
-                          onClick={()=>{this.updateDashHeading(window.localStorage.getItem("displayName"));
+                          onClick={()=>{this.updateDashHeading("Dashboard");
                                         this.dashFeedShow()}}
                           />
                 <Subheader style={{color:'#9e9e9e',fontWeight:'600',display:'inline-block',width:'80%'}}>Friends</Subheader>  
@@ -157,12 +219,17 @@ updateGroupSettlements=(groupId)=>{
                 </List>  
             </Col> 
             <Col md={6}>
-              <Dashboard dashHeading={this.state.dashHeading}/>
+            <b style={{fontSize:"30px",color:'#ff4081'}}>{this.state.dashHeading}</b>
+              <ToggleDisplay if={this.state.dashFeed}>
+              <br/>
+              <br/>
+              <Dashboard dashHeading={this.state.dashHeading.charAt(0).toUpperCase()+this.state.dashHeading.slice(1)}/>
+              </ToggleDisplay>
               <ToggleDisplay show={this.state.friendsFeed}>
                 <BillFeed friendEmail={this.state.friendEmail} bills={this.state.bills}/>
               </ToggleDisplay>
               <ToggleDisplay show={this.state.groupsFeed}>
-                <GroupFeed friendEmail={this.state.friendEmail} bills={this.state.groupBills}/>
+                <GroupFeed groupId={this.state.groupId} bills={this.state.groupBills}/>
               </ToggleDisplay>
             </Col>
             <Col md={3}>
